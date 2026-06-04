@@ -1,11 +1,13 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import proyectoService from "../services/proyectoService"
 import ProyectoCard from "./ProyectoCard"
 import DetalleProyecto from "./DetalleProyecto"
+import RegistroActividad from "./RegistroActividad"
 
 const ListaProyectos = () => {
   const [proyectos, setProyectos] = useState(proyectoService.obtenerProyectos())
   const [busqueda, setBusqueda] = useState('')
+  const [ultimaActualizacion, setUltimaActualizacion] = useState(null)
   const [proyectoSeleccionado, setProyectoSeleccionado] = useState(null)
   const [nuevoProyecto, setNuevoProyecto] = useState({
     titulo: '',
@@ -19,6 +21,20 @@ const ListaProyectos = () => {
     ],
     equipo: [{ nombre: '', rol: '' }]
   })
+  
+  useEffect(() => {
+  const ahora = new Date()
+
+  const dia = String(ahora.getDate()).padStart(2, '0')
+  const mes = String(ahora.getMonth() + 1).padStart(2, '0')
+  const año = ahora.getFullYear()
+  const horas = String(ahora.getHours()).padStart(2, '0')
+  const minutos = String(ahora.getMinutes()).padStart(2, '0')
+
+  const mensaje = `Última actualización de la lista: ${dia}/${mes}/${año} a las ${horas}:${minutos} hs.`
+
+  setUltimaActualizacion(mensaje)
+}, [proyectos])
 
   const handleEliminar = (id) => {
     proyectoService.eliminarProyecto(id)
@@ -191,6 +207,7 @@ const ListaProyectos = () => {
           />
         ))}
       </section>
+      {ultimaActualizacion && <RegistroActividad fechaActualizacion={ultimaActualizacion} />}
     </main>
   )
 }
