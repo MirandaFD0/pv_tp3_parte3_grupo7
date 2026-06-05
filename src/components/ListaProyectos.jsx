@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import proyectoService from "../services/proyectoService"
 import ProyectoCard from "./ProyectoCard"
 import DetalleProyecto from "./DetalleProyecto"
@@ -22,30 +22,35 @@ const ListaProyectos = () => {
     equipo: [{ nombre: '', rol: '' }]
   })
   
+  const primeraVez = useRef(true)
+
   useEffect(() => {
-  const ahora = new Date()
+    if (primeraVez.current) {
+      primeraVez.current = false
+      return
+    }
 
-  const dia = String(ahora.getDate()).padStart(2, '0')
-  const mes = String(ahora.getMonth() + 1).padStart(2, '0')
-  const año = ahora.getFullYear()
-  const horas = String(ahora.getHours()).padStart(2, '0')
-  const minutos = String(ahora.getMinutes()).padStart(2, '0')
+    const ahora = new Date()
+    const dia = String(ahora.getDate()).padStart(2, '0')
+    const mes = String(ahora.getMonth() + 1).padStart(2, '0')
+    const año = ahora.getFullYear()
+    const horas = String(ahora.getHours()).padStart(2, '0')
+    const minutos = String(ahora.getMinutes()).padStart(2, '0')
 
-  const mensaje = `Última actualización de la lista: ${dia}/${mes}/${año} a las ${horas}:${minutos} hs.`
+    const mensaje = `Última actualización de la lista: ${dia}/${mes}/${año} a las ${horas}:${minutos} hs.`
 
-  setUltimaActualizacion(mensaje)
-}, [proyectos])
+    setUltimaActualizacion(mensaje)
+  }, [proyectos])
 
   const handleEliminar = (id) => {
     proyectoService.eliminarProyecto(id)
     setProyectos(proyectoService.obtenerProyectos())
   }
 
-  const handleBuscar = (e) => {
-    const { value } = e.target
-    setBusqueda(value)
-    setProyectos(proyectoService.buscarProyecto(value))
-  }
+ const handleBuscar = (e) => {
+  const { value } = e.target
+  setBusqueda(value)
+}
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -198,7 +203,7 @@ const ListaProyectos = () => {
 
       <h3 style={{ textAlign: 'center', marginTop: '30px' }}>Proyectos</h3>
       <section className="cards-container">
-        {proyectos.map((proyecto) => (
+        {proyectoService.buscarProyecto(busqueda).map((proyecto) => (
           <ProyectoCard
             key={proyecto.id}
             proyecto={proyecto}
