@@ -324,3 +324,22 @@ footer p {
   font-size: 14px;
   letter-spacing: 0.5px;
 }
+@media (max-width: 600px) {
+  nav ul {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  nav ul li a {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+
+  main {
+    padding: 20px 15px;
+  }
+
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+}
