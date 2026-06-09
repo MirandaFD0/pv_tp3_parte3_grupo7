@@ -1,8 +1,8 @@
-const RegistroActividad = ({ fechaActualizacion }) => {
+const RegistroActividad = ({ fechaActualizada }) => {
   return (
-    <aside className="registro-actividad">
-      <p>{fechaActualizacion}</p>
-    </aside>
+    <div className="registro-actividad">
+      <p>Última actualización de la lista: {fechaActualizada}</p>
+    </div>
   )
 }
 
